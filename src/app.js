@@ -1,13 +1,23 @@
 const express = require('express');
+const connectDB = require("./config/database")
 const app= express();
 const PORT=4000
 
 app.get('/',(req,res)=>{
-    console.log("hello World")
-    res.send("HI")
+    res.send("HI I am here")
 })
 
-app.listen(PORT,()=>{
-    console.log(`server is listening at port ${PORT}`)
 
-});
+app.listen(PORT,()=>{
+
+  connectDB()
+    .then(()=>{
+        console.log("Database connection is established");
+        console.log(`server is listening at port ${PORT}`)
+    })
+    .catch(()=>{
+        console.log("Databse is not connected");
+    })
+    
+
+}); 
