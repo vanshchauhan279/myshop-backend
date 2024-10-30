@@ -27,10 +27,27 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        validate(val){
+            if(!validator.isStrongPassword(val)){
+                throw new Error("Make strong password")
+            }
+        }
     },
     address: {
         type: String,
         required: true
+    },
+    gender: {
+        type: String,
+        validate(val){
+            if(!['Male','Female','Others'].includes(val)){
+                throw new Error("Choose valid gender type")
+            }
+        }
     }
 })
+
+const user = mongoose.model('user',userSchema);
+
+module.exports= user;
