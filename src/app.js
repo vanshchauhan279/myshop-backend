@@ -1,12 +1,14 @@
 const express = require('express');
-const connectDB = require("./config/database")
+const connectDB = require("./config/database");
+const userRouter = require('./routes/userRouter');
+const cookieParser = require("cookie-parser")
 const app= express();
 const PORT=4000
 
-app.get('/',(req,res)=>{
-    res.send("HI I am here")
-})
+app.use(express.json())
+app.use(cookieParser())
 
+app.use('/',userRouter)
 
 app.listen(PORT,()=>{
 
@@ -18,6 +20,5 @@ app.listen(PORT,()=>{
     .catch(()=>{
         console.log("Databse is not connected");
     })
-    
 
 }); 
