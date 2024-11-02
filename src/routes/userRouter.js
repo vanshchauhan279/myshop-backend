@@ -28,6 +28,29 @@ userRouter.post("/signup", async (req, res) => {
   }
 });
 
+userRouter.post("/login", async (req, res) => {
+  try {
+    const { gmail, password } = req.body;
 
+    const user = await User.findOne({ gmail: gmail }).exec();
+    if (!user) {
+      return res.status(401).send("No user found");
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res.status(401).send("Check your credentials");
+    }
+
+    const token = jwt.sign({ _id: user._id }, "MYSTORE12345");
+    res.cookie(token);
+
+    res.send("User logged IN");
+  } catch (err) {
+    console.log("error: ", err);
+    res.status(401).send("You cannot logged In ", err);
+  }
+});
 
 module.exports = userRouter;
