@@ -1,9 +1,9 @@
 const User = require("../models/userSchema")
 const validator = require("validator")
 
-const validation = ()=>{
+const validation = (req)=>{
     const {name,gmail,phoneNum,password}= req.body;
-    if(!name>4 && !name<50){
+    if(name.length<4 || name.length>50 || !name){
          throw new Error("Name should be less than 50 and greater then 4 alphabet")
     }
     else if(!validator.isEmail(gmail)){
