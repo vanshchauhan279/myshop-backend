@@ -20,7 +20,7 @@ userRouter.post("/signup", async (req, res) => {
       address,
     });
     const token = jwt.sign({ _id: user._id }, "MYSTORE12345");
-    res.cookie(token);
+    res.cookie("token",token);
 
     res.send("User is added", user);
   } catch (err) {
@@ -44,13 +44,18 @@ userRouter.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ _id: user._id }, "MYSTORE12345");
-    res.cookie(token);
+    res.cookie("token",token);
 
     res.send("User logged IN");
   } catch (err) {
     console.log("error: ", err);
-    res.status(401).send("You cannot logged In ", err);
+    res.status(401).send("You cannot logged In ", err); 
   }
 });
+
+userRouter.post("/logout",(req,res)=>{
+    res.clearCookie('token',null);
+    res.send("Logout Successfully");
+})
 
 module.exports = userRouter;
