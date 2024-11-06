@@ -3,33 +3,32 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 const productSchema = new Schema({
-    p_Img: {
+    Img: {
         type: String,
-        default: '/Images/defaultImage.png'
+        default: '../Images/defaultImage.png'
     },
-    brandName: {
-        type: String,
-    },
-    p_Detail: {
+    BrandName: {
         type: String,
     },
-    p_Sizes: {
+    Details: {
         type: String,
     },
-    p_MRP: {
-        type: Number,
-    },
-    p_SellPrice: {
-        type: Number,
-    },
-    p_Discount: {
+    Sizes: {
         type: String,
     },
-    p_Category: {
+    MRP: {
+        type: String,
+    },
+    SellPrice: {
+        type: String,
+    },
+    Discount: {
+        type: String,
+    },
+    Category: {
         type: String,
     }
 })
-
 
 const Product = mongoose.model('product',productSchema);
 module.exports = Product;
