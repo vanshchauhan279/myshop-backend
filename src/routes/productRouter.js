@@ -5,8 +5,7 @@ const csv = require("csv-parser");
 const Product = require("../models/productSchema");
 const path = require("path");
 
-
-// we have to write middleware for route restricted to developer of company
+// we have to write middleware for route restricted to admin of company
 productRouter.post("/products", async (req, res) => {
   try {
     const csvPath = path.resolve(__dirname, "../utils/fashionDataset.csv");
@@ -15,21 +14,20 @@ productRouter.post("/products", async (req, res) => {
       .pipe(csv())
       .on("data", (row) => {
         const productData = {
-            BrandName: row['BrandName'],
-            Details: row['Details'],
-            Sizes: row['Sizes'],
-            MRP: row['MRP'],
-            SellPrice: row['SellPrice'],
-            Discount: row['Discount'],
-            Category: row['Category']
-        }
+          BrandName: row["BrandName"],
+          Details: row["Details"],
+          Sizes: row["Sizes"],
+          MRP: row["MRP"],
+          SellPrice: row["SellPrice"],
+          Discount: row["Discount"],
+          Category: row["Category"],
+        };
         products.push(productData);
-      }) 
+      })
       .on("end", async () => {
         try {
-         const mainObj = {products: products}
-          await Product.insertMany(mainObj.products);
-          res.send("Data Imported Successfully");
+          await Product.insertMany(products);
+          res.send("Data imported Successfully");
         } catch (err) {
           res.status(404).send(err);
         }
@@ -39,14 +37,27 @@ productRouter.post("/products", async (req, res) => {
   }
 });
 
-productRouter.get("/products", async(req,res)=>{
-    try{
-         const productObj = await Product.find({});
-         res.send(productObj);
+productRouter.get("/products", async (req, res) => {
+  try {
+    const productObj = await Product.find({});
+    res.send(productObj);
+  } catch (err) {
+    res.status(404).send(err);
+  }
+});
+
+productRouter.get("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const productView = await Product.findById(id);
+    if (!productView) {
+      return res.status(404).send({ message: "Product not found" });
     }
-    catch(err){
-        res.status(404).send(err)
-    }
-})
+    res.send(productView);
+  } catch (err) {
+    res.status(404).send(err);
+  }
+});
 
 module.exports = productRouter;
