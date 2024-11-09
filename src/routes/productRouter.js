@@ -4,9 +4,10 @@ const fs = require("fs");
 const csv = require("csv-parser");
 const Product = require("../models/productSchema");
 const path = require("path");
+const profileAuth = require("../middleWare/profileAuth");
 
 // we have to write middleware for route restricted to admin of company
-productRouter.post("/products", async (req, res) => {
+productRouter.post("/products", async (req,res) => {
   try {
     const csvPath = path.resolve(__dirname, "../utils/fashionDataset.csv");
     const products = [];
@@ -35,9 +36,9 @@ productRouter.post("/products", async (req, res) => {
   } catch (err) {
     res.status(404).send(err);
   }
-});
+});  
 
-productRouter.get("/products", async (req, res) => {
+productRouter.get("/products",profileAuth, async (req, res) => {
   try {
     const productObj = await Product.find({});
     res.send(productObj);
@@ -46,7 +47,7 @@ productRouter.get("/products", async (req, res) => {
   }
 });
 
-productRouter.get("/products/:id", async (req, res) => {
+productRouter.get("/product/:id",profileAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const productView = await Product.findById(id);
@@ -54,6 +55,7 @@ productRouter.get("/products/:id", async (req, res) => {
       return res.status(404).send({ message: "Product not found" });
     }
     res.send(productView);
+
   } catch (err) {
     res.status(404).send(err);
   }
