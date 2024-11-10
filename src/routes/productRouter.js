@@ -49,7 +49,6 @@ productRouter.get("/products", async (req, res) => {
 productRouter.get("/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const productView = await Product.findById(id);
     if (!productView) {
       return res.status(404).send({ message: "Product not found" });
