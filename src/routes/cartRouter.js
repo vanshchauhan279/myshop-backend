@@ -39,4 +39,15 @@ cartRouter.post("/addtoCart/:id", profileAuth, async (req, res) => {
   }
 });
 
+cartRouter.get("/cart",profileAuth,async(req,res)=>{
+  try{
+        const userId = req.user._id;
+        const cartItems= await Cart.find({user: userId});
+        res.send(cartItems)
+  }
+  catch(err){
+    res.status(400).send(err);
+  }
+})
+
 module.exports = cartRouter;
