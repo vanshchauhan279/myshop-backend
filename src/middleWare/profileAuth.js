@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/userSchema")
 
-const profileAuth = (req, res, next) => {
+const profileAuth = async(req, res, next) => {
   try {
     const cookie = req.cookies;
     const { token } = cookie;
@@ -9,9 +10,13 @@ const profileAuth = (req, res, next) => {
       return res.status(401).send("Please login to continue");
     }
     const loggedIn= jwt.verify(token, "MYSTORE12345");
-    if(!loggedIn){
-        return res.status(404).send("please login in");
+    const user = await User.findById(loggedIn._id);
+    
+    if(!user){
+      res.status(500).send("please logged In");
     }
+    req.user=user;
+   
     next();
   } catch (err) {
     return res.status(404).send(err);

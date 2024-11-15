@@ -3,6 +3,7 @@ const connectDB = require("./config/database");
 const userRouter = require('./routes/userRouter');
 const cookieParser = require("cookie-parser")
 const productRouter = require("./routes/productRouter");
+const cartRouter = require('./routes/cartRouter');
 
 const app= express();
 const PORT=4000
@@ -15,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/',userRouter,productRouter);
+app.use('/',userRouter,productRouter,cartRouter);
 
 
 app.listen(PORT,()=>{
