@@ -67,4 +67,23 @@ cartRouter.delete("/removeFromCart/:id", profileAuth, async (req, res) => {
   }
 });
 
+cartRouter.delete("/clearCart",profileAuth,async(req,res)=>{
+   try{
+          const userId = req.user._id;
+      
+      const item =await Cart.findOne({user: userId})
+
+      if(!item){
+        res.status(404).send("Card is already empty");
+      }
+
+      await Cart.deleteMany({user: userId});
+      res.send("Cart is Clear");
+   }
+   catch(err){
+    res.status(400).send(err)
+   }
+     
+})
+
 module.exports = cartRouter;
