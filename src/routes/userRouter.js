@@ -4,6 +4,7 @@ const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const validation = require("../utils/Validation");
 const bcrypt = require("bcrypt");
+const profileAuth = require("../middleWare/profileAuth");
 
 userRouter.post("/signup", async (req, res) => {
   try {
@@ -56,6 +57,19 @@ userRouter.post("/login", async (req, res) => {
 userRouter.post("/logout",(req,res)=>{
     res.clearCookie('token',null);
     res.send("Logout Successfully");
+})
+
+userRouter.get("/userprofile",profileAuth,async(req,res)=>{
+    try{
+      const user = req.user;
+      if(!user){
+        return res.status(404).send("User not found");
+      }
+      res.send(user)
+    }
+    catch(err){
+      res.status(404).send({ error: err.message });
+    }
 })
 
 module.exports = userRouter;
