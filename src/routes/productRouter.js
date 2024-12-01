@@ -38,13 +38,17 @@ productRouter.post("/products", async (req,res) => {
   }
 });  
 
-productRouter.get("/products",profileAuth, async (req, res) => {
+productRouter.get("/products", async (req, res) => {
   try {
-    const productObj = await Product.find({});
+    const page = parseInt(req.query.page) || 1 ;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page-1)*limit;
+
+    const productObj = await Product.find({}).skip(skip).limit(limit);
     res.send(productObj);
   } catch (err) {
     res.status(404).send(err);
-  }
+  } 
 });
 
 productRouter.get("/product/:id",profileAuth, async (req, res) => {

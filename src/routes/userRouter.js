@@ -47,7 +47,7 @@ userRouter.post("/login", async (req, res) => {
     const token = jwt.sign({ _id: user._id }, "MYSTORE12345");
     res.cookie("token",token);
 
-    res.send("User logged IN");
+    res.send(user);
   } catch (err) {
     console.log("error: ", err);
     res.status(401).send("You cannot logged In ", err); 
@@ -70,7 +70,7 @@ userRouter.get("/userprofile",profileAuth,async(req,res)=>{
     catch(err){
       res.status(404).send({ error: err.message });
     }
-})
+}) 
 
 module.exports = userRouter;
  
